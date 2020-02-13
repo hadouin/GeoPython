@@ -1,0 +1,38 @@
+##----- Importation des Modules -----##
+
+from tkinter import *
+
+
+##-----Définition des Variables globales-----##
+
+
+
+##----- Définition des Fonctions -----##
+
+
+def quitter():
+    fenetre.destroy()
+
+##----- Création de la fenêtre -----##
+
+fenetre = Tk()
+fenetre.title('Géopython')
+fenetre.iconbitmap("images.ico")
+
+
+
+##----- Création des boutons -----##
+
+bouton_quitter = Button(fenetre, text='Quitter', width=10, command=quitter)
+bouton_quitter.grid(row = 1, column=1)
+
+
+##----- Création du canevas -----##
+
+dessin=Canvas(fenetre, bg='white', width=1080, height=720)
+dessin.grid(row = 0, column = 0, columnspan = 3, padx=5, pady=5)
+
+
+##----- Programme principal -----##
+
+fenetre.mainloop()      
