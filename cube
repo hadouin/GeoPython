@@ -7,31 +7,20 @@ from tkinter import *
 
 
 ##----- Définition des Classes -----##
-class sol : 
-    self.y = 10
-    self.color = 'black'
-
+class sol: 
+    def __init__(self):
+        self.y = 550
+        self.color = 'black'
     def draw(self):
-        dessin.create_line()
-
-
+        dessin.create_line(0, self.y, 1100, self.y, width = 4)
 
 ##----- Définition des Fonctions -----##
-
-
-
 ##----- Création de la fenêtre -----##
-
 root = Tk()
 root.title('Géopython')
-
-
 ##----- Création des boutons -----##
-
 bouton_recommencer = Button(root, text='Recommencer', width=10)
 bouton_recommencer.grid()
-
-
 ##----- Création du canevas -----##
 
 dessin=Canvas(root, bg='white', width=1080, height=720)
@@ -39,5 +28,7 @@ dessin.grid(row = 0, column = 0, columnspan = 3, padx=5, pady=5)
 
 
 ##----- Programme principal -----##
+Sol = sol()
+Sol.draw()
 
 root.mainloop()      
