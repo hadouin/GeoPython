@@ -5,7 +5,7 @@ from tkinter import *
 
 ##-----Définition des Variables globales-----##
 
-
+##-----Inisialisation des classes-----##
 
 ##----- Définition des Fonctions -----##
 
@@ -35,4 +35,5 @@ dessin.grid(row = 0, column = 0, columnspan = 3, padx=5, pady=5)
 
 ##----- Programme principal -----##
 
+dessin.create_rectangle(515, 400, 565, 450, fill='grey', width='5')
 fenetre.mainloop()      
