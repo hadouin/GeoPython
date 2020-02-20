@@ -27,6 +27,11 @@ class player:
         self.width = 5
     def draw(self):
         dessin.create_rectangle(self.x, self.y - self.width, self.x + 50, self.y - 50 - self.width, fill='grey', width=self.width)
+    def test(self):
+        if self.x + 50 >= dessin.coords(Kube)[0]:
+            print('dead')
+        else:
+            root.after(60,Cube.test)
 
 ##----- Définition des Fonctions -----##
 def quitter():
@@ -36,6 +41,7 @@ def quitter():
 root = Tk()
 root.title('Géopython')
 root.iconbitmap('images.ico')
+root.geometry('+0+0')
 
 ##----- Création des boutons -----##
 bouton_quitter = Button(root, text='quitter',command=quitter, width=10)
@@ -52,7 +58,14 @@ Cube.draw()
 Sol = sol()
 Sol.draw()
 
+Kube = dessin.create_rectangle(400,500,450,550)
+def bouger():
+    dessin.move(Kube,-5,0)
+    root.after(60,bouger)
+Cube.test()
+bouger()
+
 Solremplis = Solremplis()
 Solremplis.draw()
 
-root.mainloop()
+root.mainloop()      
