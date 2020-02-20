@@ -55,4 +55,4 @@ Sol.draw()
 Solremplis = Solremplis()
 Solremplis.draw()
 
-root.mainloop()      
+root.mainloop()
