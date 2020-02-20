@@ -19,6 +19,9 @@ class player:
         self.width = 5
     def draw(self):
         dessin.create_rectangle(self.x, self.y - self.width, self.x + 50, self.y - 50 - self.width, fill='grey', width=self.width)
+    def test(self):
+        if self.x + 50 <= Kube:
+            pass
 ##----- Définition des Fonctions -----##
 def quitter():
     root.destroy()
@@ -43,4 +46,9 @@ Cube.draw()
 Sol = sol()
 Sol.draw()
 
+Kube = dessin.create_rectangle(100,100,150,150)
+def bouger():
+    dessin.move(Kube,5,0)
+    root.after(60,bouger)
+bouger()
 root.mainloop()      

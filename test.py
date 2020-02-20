@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 from tkinter import *
 
 fen = Tk()       # Objet stocké dans la variable "fen"
@@ -17,6 +16,3 @@ dessin.grid(row = 1, column = 0, columnspan=2)
 
 ##-----Programme principal-----##
 fen.mainloop()     # Boucle d'attente des événements
-=======
-ok ta mère
->>>>>>> f1ed4cf4b3ac65c945ff557e2dec41c9cfbf29f9
