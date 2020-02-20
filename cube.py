@@ -22,7 +22,6 @@ class player:
     def test(self):
         if self.x + 50 >= dessin.coords(Kube)[0]:
             print('dead')
-
         else:
             root.after(60,Cube.test)
 
