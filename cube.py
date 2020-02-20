@@ -2,7 +2,7 @@
 from tkinter import *
 
 ##-----Définition des Variables globales-----##
-
+G = 9.81
 ##----- Définition des Classes -----##
 class sol: 
     def __init__(self):
