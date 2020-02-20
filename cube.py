@@ -2,7 +2,7 @@
 from tkinter import *
 
 ##-----Définition des Variables globales-----##
-
+G = 9.81
 ##----- Définition des Classes -----##
 class sol: 
     def __init__(self):
@@ -11,6 +11,14 @@ class sol:
     def draw(self):
         dessin.create_line(0, self.y, 1100, self.y, width = 4)
 
+class player:
+    def __init__(self):
+        self.y = 550
+        self.x = 200
+        self.vy = 0
+        self.width = 5
+    def draw(self):
+        dessin.create_rectangle(self.x, self.y - self.width, self.x + 50, self.y - 50 - self.width, fill='grey', width=self.width)
 ##----- Définition des Fonctions -----##
 def quitter():
     root.destroy()
@@ -29,7 +37,8 @@ dessin=Canvas(root, bg='white', width=1080, height=720)
 dessin.grid(row = 0, column = 0, columnspan = 3, padx=5, pady=5)
 
 ##----- Programme principal -----##
-dessin.create_rectangle(515, 400, 565, 450, fill='grey', width='5')  
+Cube = player()
+Cube.draw()
 
 Sol = sol()
 Sol.draw()
