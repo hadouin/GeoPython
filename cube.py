@@ -3,6 +3,7 @@ from tkinter import *
 
 ##-----Définition des Variables globales-----##
 G = 9.81
+
 ##----- Définition des Classes -----##
 class sol: 
     def __init__(self):
@@ -10,6 +11,13 @@ class sol:
         self.color = 'black'
     def draw(self):
         dessin.create_line(0, self.y, 1100, self.y, width = 4)
+
+class Solremplis:
+    def __init__(self):
+        self.y = 550
+        self.x = 0
+    def draw(self):
+        dessin.create_rectangle(self.x, self.y, self.x + 1080, self.y + 550, fill="grey" ) 
 
 class player:
     def __init__(self):
@@ -19,6 +27,7 @@ class player:
         self.width = 5
     def draw(self):
         dessin.create_rectangle(self.x, self.y - self.width, self.x + 50, self.y - 50 - self.width, fill='grey', width=self.width)
+
 ##----- Définition des Fonctions -----##
 def quitter():
     root.destroy()
@@ -42,5 +51,8 @@ Cube.draw()
 
 Sol = sol()
 Sol.draw()
+
+Solremplis = Solremplis()
+Solremplis.draw()
 
 root.mainloop()      
