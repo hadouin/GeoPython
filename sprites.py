@@ -4,28 +4,43 @@ from settings import *
 vec = pg.math.Vector2
 
 class Player(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
-        self.image = pg.Surface((50, 50))
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
-        self.rect.center = (WIDTH / 2, HEIGHT / 2)
-        self.pos = vec(WIDTH / 2, HEIGHT / 2)  
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.pos = vec(x * TILESIZE + (TILESIZE / 2),
+                       y * TILESIZE + (TILESIZE / 2))
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
-    def update(self):
-        self.acc = vec(0, 0)
-        keys = pg.key.get_pressed()
-        if keys[pg.K_LEFT]:
-            self.acc.x = -PLAYER_ACC
-        if keys[pg.K_RIGHT]:
-            self.acc.x = PLAYER_ACC     
+    def jump(self):
+        self.rect.x += 1
+        hits = pg.sprite.spritecollide(self,self.game.platforms, False)
+        self.rect.x -= 1 
+        if hits:
+            self.vel.y = JUMPFORCE
 
+    def update(self):
+        self.acc = vec(0, PLAYER_ACC)
         # friction
-        self.acc += self.vel * PLAYER_FRICTION
+        self.acc.x += self.vel.x * PLAYER_FRICTION
         # equations du mouvement
         self.vel += self.acc 
         self.pos += self.vel + 0.5 * self.acc
+        # positionnement
+        self.rect.midbottom = self.pos
 
-        self.rect.center = self.pos
+class Platform(pg.sprite.Sprite):
+    def __init__(self, game, x, y, w, h):
+        self.groups = game.all_sprites, game.platforms, game.all_objects
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((w * TILESIZE, h * TILESIZE))
+        self.image.fill(GREEN)
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
