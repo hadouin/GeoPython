@@ -29,6 +29,7 @@ class Game:
         #groups
         self.all_sprites = pg.sprite.Group()
         self.platforms = pg.sprite.Group()
+        self.spikes = pg.sprite.Group()
         self.all_objects = pg.sprite.Group()
         #player
         self.player = Player(self, 3, 8)
@@ -41,9 +42,10 @@ class Game:
                 if tile == '1':
                     Platform(self, col, row, 1, 1)
                     print('plat created')
+                if tile == '2':
+                    Spike(self,col,row)
         #do not delete :
         self.run()
-
 
     def run(self):
         # Game Loop
@@ -58,10 +60,11 @@ class Game:
         # Game Loop - Update
         self.all_sprites.update()
         #test collision
-        hits = pg.sprite.spritecollide(self.player, self.platforms, False)
-        if hits:
-            self.player.pos.y = hits[0].rect.top + 0.5
-            self.player.vel.y = 0
+        if self.player.vel.y > 0:
+            hits = pg.sprite.spritecollide(self.player, self.platforms, False)
+            if hits:
+                self.player.pos.y = hits[0].rect.top + 0.5
+                self.player.vel.y = 0
         #move 'camera'
         for plat in self.all_objects:
             plat.rect.x -= GAME_SPEED
