@@ -55,6 +55,7 @@ class Game:
             self.events()
             self.update()
             self.draw()
+        # add 'kill all sprites'
 
     def update(self):
         # Game Loop - Update
@@ -62,16 +63,19 @@ class Game:
         #test collision avec les plateformes
         hits_platform = pg.sprite.spritecollide(self.player, self.platforms, False)
         if hits_platform:
-            print(hits_platform[0].rect)
-            print(hits_platform[0].rect.top)
             if self.player.vel.y > 0 and self.player.pos.y < hits_platform[0].rect.top + (self.player.acc.y / 2) + self.player.vel.y + 1:
                 self.player.pos.y = hits_platform[0].rect.top + 0.5
                 self.player.vel.y = 0
             else:
-                self.player.kill()
                 self.playing = False
         #test collision avec les pics
-
+        hits_spikes_rect = pg.sprite.spritecollide(self.player, self.spikes, False)
+        if hits_spikes_rect:
+            # hits_spike = pg.sprite.spritecollide(self.player, self.spikes, False, pg.sprite.collide_mask)
+            # if hits_spike:
+            print("spike hit")
+            self.player.kill()
+            self.playing = False
         #move 'camera'
         for plat in self.all_objects:
             plat.rect.x -= GAME_SPEED

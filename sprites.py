@@ -33,6 +33,7 @@ class Player(pg.sprite.Sprite):
         self.pos += self.vel + 0.5 * self.acc
         # positionnement
         self.rect.midbottom = self.pos
+        self.mask = pg.mask.from_surface(self.image)
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h):
@@ -50,8 +51,9 @@ class Spike(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.spikes, game.all_objects
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.transform.scale(pg.image.load("Spike01.png"), (TILESIZE, TILESIZE))
-        self.image.convert_alpha()
+        self.image = pg.image.load("spike02.png")
+        self.image.convert()
         self.rect = self.image.get_rect()
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        self.mask = pg.mask.from_surface(self.image)
