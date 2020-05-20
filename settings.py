@@ -4,7 +4,7 @@ TITLE = "Geopython"
 WIDTH = 1200
 HEIGHT = 600
 FPS = 60
-GAME_SPEED = 5
+GAME_SPEED = 7.5
 # Player proprieties
 PLAYER_ACC = 0.98
 PLAYER_FRICTION = -0.12
