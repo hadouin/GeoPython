@@ -16,8 +16,9 @@ class Game:
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
         self.running = True
+        self.font_name = pg.font.match_font(FONT)
 
-    def load_data(self):
+    def load_data(self): # Mets la Map dans le tableau
         game_folder = path.dirname(__file__)
         self.map_data = []
         with open(path.join(game_folder, 'testlvlmap.txt'), 'rt') as f:
@@ -36,7 +37,7 @@ class Game:
         self.all_sprites.add(self.player)
         #ground
         self.ground = Platform(self, 0, 9, 20, 1)
-        #platforms
+        #platforms / parcourir le tableau de la map et tout afficher
         for row, tiles in enumerate(self.map_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -50,6 +51,7 @@ class Game:
     def run(self):
         # Game Loop
         self.playing = True
+        self.GameOver = False
         while self.playing:
             self.clock.tick(FPS)
             self.events()
@@ -67,7 +69,10 @@ class Game:
                 self.player.pos.y = hits_platform[0].rect.top + 0.5
                 self.player.vel.y = 0
             else:
+                print("Plat hit")
+                self.player.kill()
                 self.playing = False
+                self.GameOver = True
         #test collision avec les pics
         hits_spikes_rect = pg.sprite.spritecollide(self.player, self.spikes, False)
         if hits_spikes_rect:
@@ -76,6 +81,7 @@ class Game:
             print("spike hit")
             self.player.kill()
             self.playing = False
+            self.GameOver = True
         #move 'camera'
         for plat in self.all_objects:
             plat.rect.x -= GAME_SPEED
@@ -113,7 +119,27 @@ class Game:
         pass
 
     def show_go_screen(self):
-            pass
+        if self.GameOver:
+            self.screen.fill(DARKGREY)
+            self.draw_grid()
+            pg.draw.rect(self.screen, BLUE_50, (100, 50, 1000, 500))
+            self.draw_text("Game Over", 30, WHITE, WIDTH / 2, HEIGHT / 6)
+            pg.display.flip()
+            while self.GameOver:
+                for event in pg.event.get():
+                    self.clock.tick(FPS)
+                    if event.type == pg.QUIT:
+                        if self.playing:
+                            self.playing = False
+                        self.running = False
+                        self.GameOver = False
+
+    def draw_text(self, text, size, color, x, y):
+        font = pg.font.Font(self.font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
 
 g = Game()

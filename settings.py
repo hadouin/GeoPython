@@ -1,6 +1,8 @@
 #settings
+import pygame as pg
 # game options/settings
 TITLE = "Geopython"
+FONT = 'consolas'
 WIDTH = 1200
 HEIGHT = 600
 FPS = 60
