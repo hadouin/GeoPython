@@ -6,7 +6,6 @@ from os import path
 from settings import *
 from sprites import *
 
-
 class Game:
     def __init__(self):
         # initialize game window, etc
