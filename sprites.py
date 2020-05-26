@@ -19,7 +19,7 @@ class Player(pg.sprite.Sprite):
 
     def jump(self):
         self.rect.x += 1
-        hits = pg.sprite.spritecollide(self,self.game.platforms, False)
+        hits = pg.sprite.spritecollide(self,self.game.platforms, False) # test si touche plateforme
         self.rect.x -= 1 
         if hits:
             self.vel.y = JUMPFORCE
@@ -33,7 +33,7 @@ class Player(pg.sprite.Sprite):
         self.pos += self.vel + 0.5 * self.acc
         # positionnement
         self.rect.midbottom = self.pos
-        self.mask = pg.mask.from_surface(self.image)
+        # self.mask = pg.mask.from_surface(self.image)
 
 class Platform(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h):
@@ -57,3 +57,4 @@ class Spike(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         self.mask = pg.mask.from_surface(self.image)
+        
