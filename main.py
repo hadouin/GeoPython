@@ -13,6 +13,8 @@ class Game:
         pg.mixer.init()
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
+        self.icon = pg.image.load(ICON)
+        pg.display.set_icon(self.icon)
         self.clock = pg.time.Clock()
         self.font_name = pg.font.match_font(FONT)
         self.running = True

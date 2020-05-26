@@ -2,6 +2,7 @@
 import pygame as pg
 # game options/settings
 TITLE = "Geopython"
+ICON = "images.ico"
 FONT = 'consolas'
 WIDTH = 1200
 HEIGHT = 600
