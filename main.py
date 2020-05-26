@@ -15,15 +15,18 @@ class Game:
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         pg.display.set_caption(TITLE)
         self.clock = pg.time.Clock()
-        self.running = True
         self.font_name = pg.font.match_font(FONT)
+        self.running = True
 
     def load_data(self): # Mets la Map dans le tableau
         game_folder = path.dirname(__file__)
-        self.map_data = []
+        self.map_data = [[],[]]
         with open(path.join(game_folder, 'testlvlmap.txt'), 'rt') as f:
             for line in f:
-                self.map_data.append(line)
+                self.map_data[0].append(line)
+        with open(path.join(game_folder, 'MAP.txt'), 'rt') as f:
+            for line in f:
+                self.map_data[1].append(line)        
 
     def new(self):
         # start a new game
@@ -38,11 +41,11 @@ class Game:
         #ground
         self.ground = Platform(self, 0, 9, 20, 1)
         #platforms / parcourir le tableau de la map et tout afficher
-        for row, tiles in enumerate(self.map_data):
+        for row, tiles in enumerate(self.map_data[self.MapNumber]):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     Platform(self, col, row, 1, 1)
-                    print('plat created')
+                    # print('plat created')
                 if tile == '2':
                     Spike(self,col,row)
         #do not delete :
@@ -92,9 +95,9 @@ class Game:
         for event in pg.event.get():
             # check for closing window
             if event.type == pg.QUIT:
-                if self.playing:
-                    self.playing = False
+                self.playing = False
                 self.running = False
+                self.Level = False
             #check for jump
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
@@ -115,24 +118,59 @@ class Game:
         pg.display.flip()
 
     def show_start_screen(self):
-        # game start screen
-        pass
+        self.Start = True
+        self.MapNumber = 0
+        while self.Start:
+            self.screen.fill(DARKGREY)
+            self.draw_grid()
+            pg.draw.rect(self.screen, LIGHTGREEN, (100, 50, 1000, 500))
+            self.draw_text("Game Over", 30, WHITE, WIDTH / 2, HEIGHT / 4 - 15)
+            self.draw_text("<- " + str(self.map_data[self.MapNumber][9]) + " ->", 30, WHITE, WIDTH / 2, HEIGHT / 2 - 15)
+            self.draw_text("[Enter] : Jouer", 30, WHITE, WIDTH / 2, HEIGHT * 3 / 4 - 15)
+            pg.display.flip()
+            for event in pg.event.get():
+                self.clock.tick(FPS)
+                if event.type == pg.QUIT:
+                    self.playing = False
+                    self.running = False
+                    self.GameOver = False
+                    self.Level = False
+                    self.Start = False
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_RIGHT:
+                        if self.MapNumber < TOTALMAPS - 1:
+                           self.MapNumber += 1
+                    if event.key == pg.K_LEFT:
+                        if self.MapNumber > 0:
+                           self.MapNumber -= 1
+                    if event.key == pg.K_RETURN:
+                        self.Start = False
+                        self.Level = True
 
     def show_go_screen(self):
         if self.GameOver:
             self.screen.fill(DARKGREY)
             self.draw_grid()
-            pg.draw.rect(self.screen, BLUE_50, (100, 50, 1000, 500))
-            self.draw_text("Game Over", 30, WHITE, WIDTH / 2, HEIGHT / 6)
+            pg.draw.rect(self.screen, BLUE, (100, 50, 1000, 500))
+            self.draw_text("Game Over", 30, WHITE, WIDTH / 2, HEIGHT / 4 - 15)
+            self.draw_text("[Esc] : Retour au menu", 30, WHITE, WIDTH / 2, HEIGHT / 2 - 15)
+            self.draw_text("[Enter] : Rejouer", 30, WHITE, WIDTH / 2, HEIGHT * 3 / 4 - 15)
             pg.display.flip()
             while self.GameOver:
                 for event in pg.event.get():
                     self.clock.tick(FPS)
                     if event.type == pg.QUIT:
-                        if self.playing:
-                            self.playing = False
+                        self.playing = False
                         self.running = False
                         self.GameOver = False
+                        self.Level = False
+                    if event.type == pg.KEYDOWN:
+                        if event.key == pg.K_ESCAPE:
+                            self.playing = False
+                            self.GameOver = False
+                            self.Level = False
+                        if event.key == pg.K_RETURN:
+                            self.GameOver = False
 
     def draw_text(self, text, size, color, x, y):
         font = pg.font.Font(self.font_name, size)
@@ -143,10 +181,10 @@ class Game:
 
 
 g = Game()
-g.show_start_screen()
 g.load_data()
 while g.running:
-    g.new()
-    g.show_go_screen()
-
+    g.show_start_screen()
+    while g.Level:
+        g.new()
+        g.show_go_screen()
 pg.quit()
