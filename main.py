@@ -36,6 +36,7 @@ class Game:
         self.platforms = pg.sprite.Group()
         self.spikes = pg.sprite.Group()
         self.all_objects = pg.sprite.Group()
+        self.jumpPads = pg.sprite.Group()
         #player
         self.player = Player(self, 3, 8)
         self.all_sprites.add(self.player)
@@ -48,7 +49,9 @@ class Game:
                     Platform(self, col, row, 1, 1)
                     # print('plat created')
                 if tile == '2':
-                    Spike(self,col,row)
+                    Spike(self, col, row)
+                if tile == '3':
+                    Jump_Pad(self, col, row)
         #do not delete :
         self.run()
 
@@ -80,16 +83,21 @@ class Game:
         #test collision avec les pics
         hits_spikes_rect = pg.sprite.spritecollide(self.player, self.spikes, False)
         if hits_spikes_rect:
-            # hits_spike = pg.sprite.spritecollide(self.player, self.spikes, False, pg.sprite.collide_mask)
-            # if hits_spike:
             print("spike hit")
             self.player.kill()
             self.playing = False
             self.GameOver = True
+        #test collision avec les pads de saut
+        hits_JumpPad = pg.sprite.spritecollide(self.player, self.jumpPads, False)
+        if hits_JumpPad:
+            print("jump hit")
+            self.player.vel.y = JUMPFORCE
+
         #move 'camera'
         for plat in self.all_objects:
             plat.rect.x -= GAME_SPEED
         self.ground.rect.x += GAME_SPEED
+
 
     def events(self):
         # Game Loop - events
@@ -125,7 +133,7 @@ class Game:
             self.screen.fill(DARKGREY)
             self.draw_grid()
             pg.draw.rect(self.screen, LIGHTGREEN, (100, 50, 1000, 500))
-            self.draw_text("Game Over", 30, WHITE, WIDTH / 2, HEIGHT / 4 - 15)
+            self.draw_text("GéoPython", 30, WHITE, WIDTH / 2, HEIGHT / 4 - 15)
             self.draw_text("<- " + str(self.map_data[self.MapNumber][9]) + " ->", 30, WHITE, WIDTH / 2, HEIGHT / 2 - 15)
             self.draw_text("[Enter] : Jouer", 30, WHITE, WIDTH / 2, HEIGHT * 3 / 4 - 15)
             pg.display.flip()

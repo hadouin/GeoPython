@@ -57,4 +57,15 @@ class Spike(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         self.mask = pg.mask.from_surface(self.image)
+
+class Jump_Pad(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.jumpPads, game.all_objects
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE * 1 / 10))
+        self.image.fill(LIGHTBLUE)
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE 
+        self.rect.y = y * TILESIZE + TILESIZE * 9 / 10
         
