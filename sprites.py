@@ -5,7 +5,8 @@ vec = pg.math.Vector2
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
-        pg.sprite.Sprite.__init__(self)
+        self.groups = game.all_sprites
+        pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(YELLOW)
@@ -17,12 +18,17 @@ class Player(pg.sprite.Sprite):
         self.vel = vec(0, 0)
         self.acc = vec(0, 0)
 
-    def jump(self):
+    def jump(self, game):
+        self.game = game
         self.rect.x += 1
-        hits = pg.sprite.spritecollide(self,self.game.platforms, False) # test si touche plateforme
+        hits_plat = pg.sprite.spritecollide(self, self.game.platforms, False) # test si touche plateforme
         self.rect.x -= 1 
-        if hits:
+        hits_orb = pg.sprite.spritecollide(self, self.game.Orbs, False) # test si touche orbe
+        if hits_plat or hits_orb:
             self.vel.y = JUMPFORCE
+            if hits_orb:
+                self.game.space_down = False
+                
 
     def update(self):
         self.acc = vec(0, PLAYER_ACC)
@@ -68,4 +74,17 @@ class Jump_Pad(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x * TILESIZE 
         self.rect.y = y * TILESIZE + TILESIZE * 9 / 10
-        
+
+class Orbs(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.Orbs, game.all_objects
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = pg.Surface.convert_alpha(self.image)
+        self.image.fill((0, 0, 0, 0))
+        self.center = (int(TILESIZE / 2), int(TILESIZE / 2))
+        pg.draw.circle(self.image, LIGHTBLUE, self.center, int(TILESIZE / 2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE 
+        self.rect.y = y * TILESIZE 
