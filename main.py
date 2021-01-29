@@ -37,9 +37,9 @@ class Game:
         self.spikes = pg.sprite.Group()
         self.all_objects = pg.sprite.Group()
         self.jumpPads = pg.sprite.Group()
+        self.Orbs = pg.sprite.Group()
         #player
         self.player = Player(self, 3, 8)
-        self.all_sprites.add(self.player)
         #ground
         self.ground = Platform(self, 0, 9, 20, 1)
         #platforms / parcourir le tableau de la map et tout afficher
@@ -52,6 +52,8 @@ class Game:
                     Spike(self, col, row)
                 if tile == '3':
                     Jump_Pad(self, col, row)
+                if tile == '4':
+                    Orbs(self, col, row)
         #do not delete :
         self.run()
 
@@ -59,6 +61,7 @@ class Game:
         # Game Loop
         self.playing = True
         self.GameOver = False
+        self.space_down = False
         while self.playing:
             self.clock.tick(FPS)
             self.events()
@@ -92,12 +95,10 @@ class Game:
         if hits_JumpPad:
             print("jump hit")
             self.player.vel.y = JUMPFORCE
-
         #move 'camera'
         for plat in self.all_objects:
             plat.rect.x -= GAME_SPEED
         self.ground.rect.x += GAME_SPEED
-
 
     def events(self):
         # Game Loop - events
@@ -110,7 +111,12 @@ class Game:
             #check for jump
             if event.type == pg.KEYDOWN:
                 if event.key == pg.K_SPACE:
-                    self.player.jump()
+                    self.space_down = True
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_SPACE: 
+                    self.space_down = False
+        if self.space_down:
+            self.player.jump(self)
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -187,7 +193,6 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.midtop = (x, y)
         self.screen.blit(text_surface, text_rect)
-
 
 g = Game()
 g.load_data()
